@@ -1,3 +1,6 @@
 class Merchant < ApplicationRecord
-  has_many :items, dependent: :destroy
+  validates :name, :created_at, :updated_at, presence: true
+
+  has_many :items
+  has_many :invoices
 end
