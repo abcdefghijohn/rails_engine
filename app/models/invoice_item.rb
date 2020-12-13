@@ -1,4 +1,6 @@
 class InvoiceItem < ApplicationRecord
-  belongs_to :item, dependent: :destroy
-  belongs_to :invoice, dependent: :destroy
+  validates :item_id, :invoice_id, :quantity, :unit_price, :created_at, :updated_at, presence: true
+
+  belongs_to :item
+  belongs_to :invoice
 end
