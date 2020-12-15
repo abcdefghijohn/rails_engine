@@ -7,5 +7,8 @@ describe "Merchants API" do
     get '/api/v1/merchants'
 
     expect(response).to be_successful
+    
+    merchants = JSON.parse(response.body, symbolize_names: true)
+    expect(merchants[:data].count).to eq(10)
   end
 end
