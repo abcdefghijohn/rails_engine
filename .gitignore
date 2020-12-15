@@ -19,5 +19,8 @@
 
 .byebug_history
 
+echo "coverage" >> .gitignore
++ coverage
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
