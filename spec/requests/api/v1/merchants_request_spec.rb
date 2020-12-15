@@ -20,4 +20,13 @@ describe "Merchants API" do
     expect(response).to be_successful
     expect(merchant[:data][:id]).to eq(id.to_s)
   end
+
+  it 'can create a merchant' do
+    post '/api/v1/merchants'
+    Merchant.create!(name: 'Jim Bob')
+    merchant = Merchant.last
+
+    expect(response).to be_successful
+    expect(merchant.name).to eq('Jim Bob')
+  end
 end
