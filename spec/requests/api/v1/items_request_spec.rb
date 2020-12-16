@@ -54,17 +54,20 @@ describe 'Items API' do
 
     patch "/api/v1/items/#{id}", params: { name: 'Macaroni' }
     item = Item.find_by(id: id)
-    
+
     expect(response).to be_successful
     expect(item.name).not_to eq(previous_item.name)
     expect(item.name).to eq('Macaroni')
   end
-  #
-  # it 'can delete a merchant' do
-  #   id = create(:merchant).id
-  #   delete "/api/v1/merchants/#{id}"
-  #
-  #   expect(response).to be_successful
-  #   expect(Merchant.count).to eq(0)
-  # end
+
+  it 'can delete an item' do
+    create :merchant
+    merchant = Merchant.last
+
+    id = create(:item, merchant: merchant).id
+    delete "/api/v1/items/#{id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+  end
 end
