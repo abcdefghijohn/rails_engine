@@ -1,30 +1,38 @@
-class Api::V1::MerchantsController < ApplicationController
+# frozen_string_literal: true
 
-  def index
-    render json: MerchantSerializer.new(Merchant.all)
-  end
+# merchants controller
 
-  def show
-    id = params[:id]
-    render json: MerchantSerializer.new(Merchant.find_by(id: id))
-  end
+module Api
+  module V1
+    class MerchantsController < ApplicationController
+      def index
+        render json: MerchantSerializer.new(Merchant.all)
+      end
 
-  def create
-    render json: MerchantSerializer.new(Merchant.create{merchant_params})
-  end
+      def show
+        id = params[:id]
+        render json: MerchantSerializer.new(Merchant.find_by(id: id))
+      end
 
-  def update
-    render json: MerchantSerializer.new(Merchant.update(params[:id], merchant_params))
-  end
+      def create
+        render json: MerchantSerializer.new(Merchant.create { merchant_params })
+      end
 
-  def destroy
-    id = params[:id]
-    render json: MerchantSerializer.new(Merchant.find_by(id: id))
-    Merchant.delete(id)
-  end
+      def update
+        render json: MerchantSerializer.new(Merchant.update(params[:id], merchant_params))
+      end
 
-  private
-  def merchant_params
-    params.permit(:name)
+      def destroy
+        id = params[:id]
+        render json: MerchantSerializer.new(Merchant.find_by(id: id))
+        Merchant.delete(id)
+      end
+
+      private
+
+      def merchant_params
+        params.permit(:name)
+      end
+    end
   end
 end

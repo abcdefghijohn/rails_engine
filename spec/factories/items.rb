@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :item do
-    name { "MyString" }
-    description { "MyString" }
+    name { 'MyString' }
+    description { 'MyString' }
     unit_price { 1.5 }
     merchant_id { nil }
   end

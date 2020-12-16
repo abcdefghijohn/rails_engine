@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 # InvoiceItem.destroy_all
@@ -7,14 +9,13 @@ require 'csv'
 # Customer.destroy_all
 # Merchant.destroy_all
 
-cmd = "pg_restore --verbose --clean --no-acl --no-owner -h localhost -U $(whoami) -d rails-engine_development db/data/rails-engine-development.pgdump"
-puts "Loading PostgreSQL Data dump into local database with command:"
+cmd = 'pg_restore --verbose --clean --no-acl --no-owner -h localhost -U $(whoami) -d rails-engine_development db/data/rails-engine-development.pgdump'
+puts 'Loading PostgreSQL Data dump into local database with command:'
 puts cmd
 system(cmd)
 
-
 data = 'db/data/items.csv'
-CSV.foreach(Rails.root.join(data), headers:true) do |row|
+CSV.foreach(Rails.root.join(data), headers: true) do |row|
   row['unit_price'] = (row['unit_price'].to_f / 100).round(2)
   Item.create!(row.to_hash)
 end
