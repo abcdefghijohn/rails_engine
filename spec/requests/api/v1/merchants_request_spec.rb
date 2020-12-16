@@ -29,4 +29,16 @@ describe "Merchants API" do
     expect(response).to be_successful
     expect(merchant.name).to eq('Jim Bob')
   end
+
+  it 'can update a merchant' do
+    id = create(:merchant).id
+    Merchant.create!(name: 'Jim Bob')
+    previous_merchant = Merchant.last.name
+    patch "/api/v1/merchants/#{id}", params: { name: 'Joe Bob'}
+
+    merchant = Merchant.find_by(id: id)
+    expect(response).to be_successful
+    expect(merchant.name).not_to eq(previous_merchant)
+    expect(merchant.name).to eq('Joe Bob')
+  end
 end
