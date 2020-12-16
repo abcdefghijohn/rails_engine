@@ -27,15 +27,23 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(item[:data][:id]).to eq(id.to_s)
   end
-  #
-  # it 'can create a merchant' do
-  #   post '/api/v1/merchants'
-  #   Merchant.create!(name: 'Jim Bob')
-  #   merchant = Merchant.last
-  #
-  #   expect(response).to be_successful
-  #   expect(merchant.name).to eq('Jim Bob')
-  # end
+
+  it 'can create an item' do
+    create :merchant
+    merchant = Merchant.last
+    Item.create!(name: 'Chicken Wing',
+                 description: "Chillin with ma homies",
+                 unit_price: 4,
+                 merchant_id: merchant.id)
+
+    post '/api/v1/items'
+    item = Item.last
+    
+    expect(response).to be_successful
+    expect(item.name).to eq('Chicken Wing')
+    expect(item.description).to eq('Chillin with ma homies')
+    expect(item.unit_price).to eq(4.0)
+  end
   #
   # it 'can update a merchant' do
   #   id = create(:merchant).id
