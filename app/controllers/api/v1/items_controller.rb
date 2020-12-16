@@ -19,6 +19,12 @@ module Api
         render json: ItemSerializer.new(Item.update(params[:id], item_params))
       end
 
+      def destroy
+        id = params[:id]
+        render json: ItemSerializer.new(Item.find_by(id: id))
+        Item.delete(id)
+      end
+
       private
       def item_params
         params.permit(:name, :description, :unit_price, :merchant_id)
