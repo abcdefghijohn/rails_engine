@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoiceItem < ApplicationRecord
   validates :item_id, :invoice_id, :quantity, :unit_price, presence: true
 

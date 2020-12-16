@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "Merchants API" do
+describe 'Merchants API' do
   it 'sends a list of merchants' do
     create_list(:merchant, 10)
 
@@ -34,7 +36,7 @@ describe "Merchants API" do
     id = create(:merchant).id
     Merchant.create!(name: 'Jim Bob')
     previous_merchant = Merchant.last.name
-    patch "/api/v1/merchants/#{id}", params: { name: 'Joe Bob'}
+    patch "/api/v1/merchants/#{id}", params: { name: 'Joe Bob' }
 
     merchant = Merchant.find_by(id: id)
     expect(response).to be_successful
