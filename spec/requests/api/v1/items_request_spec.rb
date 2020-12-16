@@ -10,7 +10,7 @@ describe 'Items API' do
     create(:item, merchant: merchant)
 
     get '/api/v1/items'
-
+    require "pry"; binding.pry
     expect(response).to be_successful
 
     items = JSON.parse(response.body, symbolize_names: true)
