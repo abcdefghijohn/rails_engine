@@ -38,24 +38,27 @@ describe 'Items API' do
 
     post '/api/v1/items'
     item = Item.last
-    
+
     expect(response).to be_successful
     expect(item.name).to eq('Chicken Wing')
     expect(item.description).to eq('Chillin with ma homies')
     expect(item.unit_price).to eq(4.0)
   end
-  #
-  # it 'can update a merchant' do
-  #   id = create(:merchant).id
-  #   Merchant.create!(name: 'Jim Bob')
-  #   previous_merchant = Merchant.last.name
-  #   patch "/api/v1/merchants/#{id}", params: { name: 'Joe Bob' }
-  #
-  #   merchant = Merchant.find_by(id: id)
-  #   expect(response).to be_successful
-  #   expect(merchant.name).not_to eq(previous_merchant)
-  #   expect(merchant.name).to eq('Joe Bob')
-  # end
+
+  it 'can update an item' do
+    create :merchant
+    merchant = Merchant.last
+
+    id = create(:item, merchant: merchant).id
+    previous_item = Item.last
+
+    patch "/api/v1/items/#{id}", params: { name: 'Macaroni' }
+    item = Item.find_by(id: id)
+    
+    expect(response).to be_successful
+    expect(item.name).not_to eq(previous_item.name)
+    expect(item.name).to eq('Macaroni')
+  end
   #
   # it 'can delete a merchant' do
   #   id = create(:merchant).id
