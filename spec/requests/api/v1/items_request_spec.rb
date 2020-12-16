@@ -6,25 +6,27 @@ describe 'Items API' do
   it 'sends a list of items' do
     create :merchant
     merchant = Merchant.last
+
     create(:item, merchant: merchant)
     create(:item, merchant: merchant)
 
     get '/api/v1/items'
-    require "pry"; binding.pry
     expect(response).to be_successful
 
     items = JSON.parse(response.body, symbolize_names: true)
     expect(items[:data].count).to eq(2)
   end
 
-  # it 'can find a specific merchant by id' do
-  #   id = create(:merchant).id
-  #   get "/api/v1/merchants/#{id}"
-  #
-  #   merchant = JSON.parse(response.body, symbolize_names: true)
-  #   expect(response).to be_successful
-  #   expect(merchant[:data][:id]).to eq(id.to_s)
-  # end
+  it 'can find a specific item by id' do
+    create :merchant
+    merchant = Merchant.last
+    id = create(:item, merchant: merchant).id
+    get "/api/v1/items/#{id}"
+
+    item = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(item[:data][:id]).to eq(id.to_s)
+  end
   #
   # it 'can create a merchant' do
   #   post '/api/v1/merchants'
