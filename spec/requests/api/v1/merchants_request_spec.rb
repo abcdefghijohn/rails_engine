@@ -37,7 +37,6 @@ describe "Merchants API" do
     patch "/api/v1/merchants/#{id}", params: { name: 'Joe Bob'}
 
     merchant = Merchant.find_by(id: id)
-
     expect(response).to be_successful
     expect(merchant.name).not_to eq(previous_merchant)
     expect(merchant.name).to eq('Joe Bob')
