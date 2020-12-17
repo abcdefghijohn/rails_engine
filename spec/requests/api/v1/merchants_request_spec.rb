@@ -51,4 +51,39 @@ describe 'Merchants API' do
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
   end
+
+  describe :finder do
+    it 'can find a specific merchant based on input' do
+      create(:merchant, name: 'Jim Bob')
+      create(:merchant, name: 'Joe Bob')
+
+      get '/api/v1/merchants/search/find_one?name=joe'
+      expect(response).to be_successful
+
+      merchant = JSON.parse(response.body, symbolize_names: true)
+      name = merchant[:data][:attributes][:name].downcase
+
+      expect(merchant[:data]).to be_a(Hash)
+      expect(merchant.count).to eq(1)
+      expect(name).to include('joe')
+    end
+
+    it 'can return all merchants that match input' do
+      create(:merchant, name: 'Jim Bob')
+      create(:merchant, name: 'Joe Bob')
+      create(:merchant, name: 'Frank')
+
+      get '/api/v1/merchants/search/find_all?name=bob'
+      expect(response).to be_successful
+
+      merchants = JSON.parse(response.body, symbolize_names: true)
+      names = merchants[:data].map do |merchant|
+        merchant[:attributes][:name].downcase
+      end
+      expect(names.count).to eq(2)
+      names.each do |name|
+      expect(name).to include('bob')
+      end
+    end
+  end
 end
