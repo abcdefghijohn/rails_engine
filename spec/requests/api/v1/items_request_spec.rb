@@ -71,3 +71,45 @@ describe 'Items API' do
     expect(Item.count).to eq(0)
   end
 end
+
+describe :finder do
+  it 'can find a specific item based on input' do
+    create :merchant
+    merchant = Merchant.last
+
+    create(:item, name: 'ring pop', merchant: merchant)
+    create(:item, name: 'blow pop', merchant: merchant)
+    create(:item, name: 'hot pocket', merchant: merchant)
+
+    get '/api/v1/items/find?name=ket'
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+    name = item[:data][:attributes][:name].downcase
+
+    expect(item[:data]).to be_a(Hash)
+    expect(item.count).to eq(1)
+    expect(name).to include('hot')
+  end
+
+  it 'can return all items that match input' do
+    create :merchant
+    merchant = Merchant.last
+
+    create(:item, name: 'ring pop', merchant: merchant)
+    create(:item, name: 'blow pop', merchant: merchant)
+    create(:item, name: 'hot pocket', merchant: merchant)
+
+    get '/api/v1/items/find_all?name=pop'
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+    names = items[:data].map do |item|
+      item[:attributes][:name].downcase
+    end
+    expect(names.count).to eq(2)
+    names.each do |name|
+      expect(name).to include('pop')
+    end
+  end
+end

@@ -57,7 +57,7 @@ describe 'Merchants API' do
       create(:merchant, name: 'Jim Bob')
       create(:merchant, name: 'Joe Bob')
 
-      get '/api/v1/merchants/search/find_one?name=joe'
+      get '/api/v1/merchants/find?name=joe'
       expect(response).to be_successful
 
       merchant = JSON.parse(response.body, symbolize_names: true)
@@ -67,13 +67,14 @@ describe 'Merchants API' do
       expect(merchant.count).to eq(1)
       expect(name).to include('joe')
     end
+  end
 
     it 'can return all merchants that match input' do
       create(:merchant, name: 'Jim Bob')
       create(:merchant, name: 'Joe Bob')
       create(:merchant, name: 'Frank')
 
-      get '/api/v1/merchants/search/find_all?name=bob'
+      get '/api/v1/merchants/find_all?name=bob'
       expect(response).to be_successful
 
       merchants = JSON.parse(response.body, symbolize_names: true)
@@ -83,7 +84,6 @@ describe 'Merchants API' do
       expect(names.count).to eq(2)
       names.each do |name|
       expect(name).to include('bob')
-      end
     end
   end
 end
