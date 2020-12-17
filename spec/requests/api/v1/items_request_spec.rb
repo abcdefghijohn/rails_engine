@@ -114,7 +114,6 @@ describe :finder do
   end
 end
 
-
 describe :relationship do
   it 'can return the merchant associated with an item' do
     merchant = create(:merchant, name: 'Jim Bob')
@@ -124,7 +123,7 @@ describe :relationship do
     expect(response).to be_successful
 
     merchant_response = JSON.parse(response.body, symbolize_names: true)
-    
+
     expect(merchant_response[:data][:attributes][:name]).to eq('Jim Bob')
     expect(merchant_response[:data][:id]).to eq(merchant.id.to_s)
   end
