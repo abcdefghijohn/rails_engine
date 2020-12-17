@@ -25,7 +25,7 @@ describe 'Merchants API' do
 
   it 'can create a merchant' do
     post '/api/v1/merchants'
-    Merchant.create!(name: 'Jim Bob')
+    create(:merchant, name: 'Jim Bob')
     merchant = Merchant.last
 
     expect(response).to be_successful
@@ -51,13 +51,14 @@ describe 'Merchants API' do
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
   end
+end
 
-  describe :finder do
+  describe 'Finder Endpoints' do
     it 'can find a specific merchant based on input' do
       create(:merchant, name: 'Jim Bob')
       create(:merchant, name: 'Joe Bob')
 
-      get '/api/v1/merchants/search/find_one?name=joe'
+      get '/api/v1/merchants/find?name=joe'
       expect(response).to be_successful
 
       merchant = JSON.parse(response.body, symbolize_names: true)
@@ -73,7 +74,7 @@ describe 'Merchants API' do
       create(:merchant, name: 'Joe Bob')
       create(:merchant, name: 'Frank')
 
-      get '/api/v1/merchants/search/find_all?name=bob'
+      get '/api/v1/merchants/find_all?name=bob'
       expect(response).to be_successful
 
       merchants = JSON.parse(response.body, symbolize_names: true)
@@ -83,7 +84,31 @@ describe 'Merchants API' do
       expect(names.count).to eq(2)
       names.each do |name|
       expect(name).to include('bob')
-      end
+    end
+  end
+
+  describe 'Relationships' do
+    it 'can return the items associated with a merchant' do
+      merchant_1 = create(:merchant, name: 'Jim Bob')
+      merchant_2 = create(:merchant, name: 'Joe Bob')
+      id_1 = merchant_1.id
+      id_2 = merchant_2.id
+
+      create(:item, name: 'ring pop', merchant_id: id_1)
+      create(:item, name: 'blow pop', merchant_id: id_2)
+      create(:item, name: 'hot pocket', merchant_id: id_1)
+
+      item_1 = Item.first
+      item_3 = Item.last
+
+      get "/api/v1/merchants/#{id_1}/items"
+      expect(response).to be_successful
+
+      items_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items_response[:data].count).to eq(2)
+      expect(items_response[:data].first[:id]).to eq(item_1.id.to_s)
+      expect(items_response[:data].last[:id]).to eq(item_3.id.to_s)
     end
   end
 end

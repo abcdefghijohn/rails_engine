@@ -71,3 +71,60 @@ describe 'Items API' do
     expect(Item.count).to eq(0)
   end
 end
+
+describe 'Finder Endpoints' do
+  it 'can find a specific item based on input' do
+    create :merchant
+    merchant = Merchant.last
+
+    create(:item, name: 'ring pop', merchant: merchant)
+    create(:item, name: 'blow pop', merchant: merchant)
+    create(:item, name: 'hot pocket', merchant: merchant)
+
+    get '/api/v1/items/find?name=ket'
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+    name = item[:data][:attributes][:name].downcase
+
+    expect(item[:data]).to be_a(Hash)
+    expect(item.count).to eq(1)
+    expect(name).to include('hot')
+  end
+
+  it 'can return all items that match input' do
+    create :merchant
+    merchant = Merchant.last
+
+    create(:item, name: 'ring pop', merchant: merchant)
+    create(:item, name: 'blow pop', merchant: merchant)
+    create(:item, name: 'hot pocket', merchant: merchant)
+
+    get '/api/v1/items/find_all?name=pop'
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+    names = items[:data].map do |item|
+      item[:attributes][:name].downcase
+    end
+    expect(names.count).to eq(2)
+    names.each do |name|
+      expect(name).to include('pop')
+    end
+  end
+end
+
+describe 'Relationships' do
+  it 'can return the merchant associated with an item' do
+    merchant = create(:merchant, name: 'Jim Bob')
+    id = create(:item, merchant: merchant).id
+
+    get "/api/v1/items/#{id}/merchants"
+    expect(response).to be_successful
+
+    merchant_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(merchant_response[:data][:attributes][:name]).to eq('Jim Bob')
+    expect(merchant_response[:data][:id]).to eq(merchant.id.to_s)
+  end
+end

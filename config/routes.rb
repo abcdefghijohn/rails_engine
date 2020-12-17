@@ -4,8 +4,14 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :merchants do
-        get '/search/find_one', to: 'search#find_one'
-        get '/search/find_all', to: 'search#find_all'
+        get '/find', to: 'search#find'
+        get '/find_all', to: 'search#find_all'
+        get '/:id/items', to: 'search#show'
+      end
+      namespace :items do
+        get '/find', to: 'search#find'
+        get '/find_all', to: 'search#find_all'
+        get '/:id/merchants',to: 'search#show'
       end
       resources :merchants
       resources :items
