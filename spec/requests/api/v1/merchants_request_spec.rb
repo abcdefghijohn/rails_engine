@@ -51,6 +51,7 @@ describe 'Merchants API' do
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
   end
+end
 
   describe :finder do
     it 'can find a specific merchant based on input' do
@@ -67,7 +68,6 @@ describe 'Merchants API' do
       expect(merchant.count).to eq(1)
       expect(name).to include('joe')
     end
-  end
 
     it 'can return all merchants that match input' do
       create(:merchant, name: 'Jim Bob')
