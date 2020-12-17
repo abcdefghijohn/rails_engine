@@ -2,6 +2,11 @@ module Api
   module V1
     module Items
       class SearchController < ApplicationController
+        def show
+          item_id = params[:id]
+          render json: MerchantSerializer.new(Item.find(item_id).merchant)
+        end
+        
         def find
           like_keyword = "%#{item_params[:name]}%"
           item = Item.where('name ILIKE ?', like_keyword).first
