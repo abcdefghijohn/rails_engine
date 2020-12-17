@@ -77,6 +77,13 @@ describe 'Merchants API' do
       expect(response).to be_successful
 
       merchants = JSON.parse(response.body, symbolize_names: true)
+      names = merchants[:data].map do |merchant|
+        merchant[:attributes][:name].downcase
+      end
+      expect(names.count).to eq(2)
+      names.each do |name|
+      expect(name).to include('bob')
+      end
     end
   end
 end
