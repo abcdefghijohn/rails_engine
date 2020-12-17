@@ -53,7 +53,7 @@ describe 'Merchants API' do
   end
 end
 
-  describe :finder do
+  describe 'Finder Endpoints' do
     it 'can find a specific merchant based on input' do
       create(:merchant, name: 'Jim Bob')
       create(:merchant, name: 'Joe Bob')
@@ -87,7 +87,7 @@ end
     end
   end
 
-  describe :relationship do
+  describe 'Relationships' do
     it 'can return the items associated with a merchant' do
       merchant_1 = create(:merchant, name: 'Jim Bob')
       merchant_2 = create(:merchant, name: 'Joe Bob')

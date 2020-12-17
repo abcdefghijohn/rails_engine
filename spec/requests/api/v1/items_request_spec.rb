@@ -72,7 +72,7 @@ describe 'Items API' do
   end
 end
 
-describe :finder do
+describe 'Finder Endpoints' do
   it 'can find a specific item based on input' do
     create :merchant
     merchant = Merchant.last
@@ -114,7 +114,7 @@ describe :finder do
   end
 end
 
-describe :relationship do
+describe 'Relationships' do
   it 'can return the merchant associated with an item' do
     merchant = create(:merchant, name: 'Jim Bob')
     id = create(:item, merchant: merchant).id
