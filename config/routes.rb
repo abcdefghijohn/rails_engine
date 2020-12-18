@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         get '/find_all', to: 'search#find_all'
         get '/:id/items', to: 'search#show'
         get '/most_revenue', to: 'biz_int#most_revenue'
+        get '/most_items', to: 'biz_int#most_items'
       end
       namespace :items do
         get '/find', to: 'search#find'
