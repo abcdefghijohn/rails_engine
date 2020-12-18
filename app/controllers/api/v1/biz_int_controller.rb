@@ -19,6 +19,11 @@ module Api
         revenue_info = Invoice.revenue_dates(start_date, end_date)
         render json: RevenueSerializer.revenue(revenue_info)
       end
+
+      def revenue
+        id = params[:id]
+        render json: RevenueSerializer.revenue(Merchant.revenue(id))
+      end
     end
   end
 end
