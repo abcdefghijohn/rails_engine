@@ -122,6 +122,7 @@ describe 'Finder Endpoints' do
       merchant_2 = Merchant.create!(name: 'Second')
       merchant_3 = Merchant.create!(name: 'Third')
       merchant_4 = Merchant.create!(name: 'Fourth')
+      @id = merchant_3.id
       item_1 = create(:item, merchant: merchant_1, unit_price: 1000)
       item_2 = create(:item, merchant: merchant_2, unit_price: 100)
       item_3 = create(:item, merchant: merchant_3, unit_price: 10)
@@ -172,6 +173,17 @@ describe 'Finder Endpoints' do
       expect(results.length).to eq(1)
       expect(revenue).to be_a(Float)
       expect(revenue).to eq(1230.0)
+    end
+
+    it 'can return total revenue for a single merchant' do
+      get "/api/v1/merchants/#{@id}/revenue"
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+      revenue = results[:data][:attributes][:revenue]
+
+      expect(results.length).to eq(1)
+      expect(revenue).to eq(30.0)
     end
   end
 end
