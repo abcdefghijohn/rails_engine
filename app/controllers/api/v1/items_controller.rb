@@ -1,7 +1,6 @@
 module Api
   module V1
     class ItemsController < ApplicationController
-
       def index
         render json: ItemSerializer.new(Item.all)
       end
@@ -26,6 +25,7 @@ module Api
       end
 
       private
+
       def item_params
         params.permit(:name, :description, :unit_price, :merchant_id)
       end
