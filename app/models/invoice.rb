@@ -9,4 +9,13 @@ class Invoice < ApplicationRecord
   has_many :transactions
   has_many :invoice_items
   has_many :items, through: :invoice_items
+
+  def self.revenue_dates(start_date, end_date)
+    Invoice.joins(:transactions, :invoice_items)
+    .select("SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
+    .where(invoices: { status: 'shipped'})
+    .where(transactions: { result: 'success'})
+    .where('invoices.created_at >= ?', start_date.to_s)
+    .where('invoices.created_at <= ?', end_date.to_s)
+  end
 end

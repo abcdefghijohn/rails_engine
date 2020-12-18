@@ -126,10 +126,10 @@ describe 'Finder Endpoints' do
       item_2 = create(:item, merchant: merchant_2, unit_price: 100)
       item_3 = create(:item, merchant: merchant_3, unit_price: 10)
       item_4 = create(:item, merchant: merchant_4, unit_price: 1)
-      invoice_1 = merchant_1.invoices.create!(customer: customer_1, status: 'shipped')
-      invoice_2 = merchant_2.invoices.create!(customer: customer_2, status: 'shipped')
-      invoice_3 = merchant_3.invoices.create!(customer: customer_3, status: 'shipped')
-      invoice_4 = merchant_4.invoices.create!(customer: customer_4, status: 'shipped')
+      invoice_1 = merchant_1.invoices.create!(customer: customer_1, status: 'shipped', created_at: 'Tue, 01 Dec 2020 00:00:00 UTC +00:00')
+      invoice_2 = merchant_2.invoices.create!(customer: customer_2, status: 'shipped', created_at: 'Wed, 02 Dec 2020 00:00:00 UTC +00:00')
+      invoice_3 = merchant_3.invoices.create!(customer: customer_3, status: 'shipped', created_at: 'Tue, 01 Dec 2020 00:00:00 UTC +00:00')
+      invoice_4 = merchant_4.invoices.create!(customer: customer_4, status: 'shipped', created_at: 'Tue, 03 Nov 2020 00:00:00 UTC +00:00')
       invoice_1.invoice_items.create(item: item_1, quantity: 1, unit_price: 1000)
       invoice_2.invoice_items.create(item: item_2, quantity: 2, unit_price: 100)
       invoice_3.invoice_items.create(item: item_3, quantity: 3, unit_price: 10)
@@ -160,6 +160,18 @@ describe 'Finder Endpoints' do
       expect(results[:data].length).to eq(3)
       expect(results[:data].first[:attributes][:name]).to eq('Fourth')
       expect(results[:data].last[:attributes][:name]).to eq('Second')
+    end
+
+    it 'can return total revenue across all merchants between given dates' do
+      get '/api/v1/revenue?start=2020-12-01&end=2020-12-18'
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+      revenue = results[:data][:attributes][:revenue]
+
+      expect(results.length).to eq(1)
+      expect(revenue).to be_a(Float)
+      expect(revenue).to eq(1230.0)
     end
   end
 end
