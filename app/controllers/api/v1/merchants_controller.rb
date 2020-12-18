@@ -23,9 +23,8 @@ module Api
       end
 
       def destroy
-        id = params[:id]
-        render json: MerchantSerializer.new(Merchant.find_by(id: id))
-        Merchant.delete(id)
+        merchant = Merchant.find(params[:id])
+        merchant.destroy
       end
 
       private
