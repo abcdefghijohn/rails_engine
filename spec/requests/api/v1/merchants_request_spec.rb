@@ -113,7 +113,7 @@ describe 'Finder Endpoints' do
   end
 
   describe 'Business Intelligence' do
-    it 'can return a variable number of merchants ranked by total revenue' do
+    before :each do
       customer_1 = Customer.create!(first_name: 'Customer', last_name: 'One')
       customer_2 = Customer.create!(first_name: 'Customer', last_name: 'Two')
       customer_3 = Customer.create!(first_name: 'Customer', last_name: 'Three')
@@ -131,20 +131,35 @@ describe 'Finder Endpoints' do
       invoice_3 = merchant_3.invoices.create!(customer: customer_3, status: 'shipped')
       invoice_4 = merchant_4.invoices.create!(customer: customer_4, status: 'shipped')
       invoice_1.invoice_items.create(item: item_1, quantity: 1, unit_price: 1000)
-      invoice_2.invoice_items.create(item: item_2, quantity: 1, unit_price: 100)
-      invoice_3.invoice_items.create(item: item_3, quantity: 1, unit_price: 10)
-      invoice_4.invoice_items.create(item: item_4, quantity: 1, unit_price: 1)
+      invoice_2.invoice_items.create(item: item_2, quantity: 2, unit_price: 100)
+      invoice_3.invoice_items.create(item: item_3, quantity: 3, unit_price: 10)
+      invoice_4.invoice_items.create(item: item_4, quantity: 4, unit_price: 1)
       invoice_1.transactions.create!(result: 'success', credit_card_number: 123412341234, credit_card_expiration_date: 02/22)
       invoice_2.transactions.create!(result: 'success', credit_card_number: 123412341234, credit_card_expiration_date: 02/20)
       invoice_3.transactions.create!(result: 'success', credit_card_number: 123412341234, credit_card_expiration_date: 02/20)
       invoice_4.transactions.create!(result: 'success', credit_card_number: 123412341234, credit_card_expiration_date: 02/20)
+    end
 
+    it 'can return a variable number of merchants ranked by total revenue' do
       get '/api/v1/merchants/most_revenue?quantity=3'
+
       expect(response).to be_successful
       results = JSON.parse(response.body, symbolize_names: true)
+
       expect(results[:data].count).to eq(3)
       expect(results[:data].first[:attributes][:name]).to eq('First')
       expect(results[:data].last[:attributes][:name]).to eq('Third')
+    end
+
+    it 'can return a variable number of merchants ranked by total number of items sold' do
+      get '/api/v1/merchants/most_items?quantity=3'
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+
+      expect(results[:data].length).to eq(3)
+      expect(results[:data].first[:attributes][:name]).to eq('Fourth')
+      expect(results[:data].last[:attributes][:name]).to eq('Second')
     end
   end
 end
