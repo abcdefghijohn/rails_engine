@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       end
       resources :merchants
       resources :items
+      get '/revenue', to: 'biz_int#revenue_dates'
     end
   end
 end
