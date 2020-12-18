@@ -4,7 +4,7 @@ module Api
       def most_revenue
         quantity = params[:quantity].to_i
         info = Merchant.most_revenue(quantity)
-        render json: MerchantSerializer.new(info).serializable_hash.to_json
+        render json: MerchantSerializer.new(info)
       end
 
       def most_items
