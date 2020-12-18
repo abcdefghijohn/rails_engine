@@ -19,8 +19,8 @@ module Api
           render json: MerchantSerializer.new(merchants)
         end
 
-
         private
+
         def merchant_params
           params.permit(:name, :created_at, :updated_at)
         end
