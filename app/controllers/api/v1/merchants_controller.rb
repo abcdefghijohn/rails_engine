@@ -15,7 +15,8 @@ module Api
       end
 
       def create
-        render json: MerchantSerializer.new(Merchant.create { merchant_params })
+        merchant = Merchant.create(merchant_params)
+        render json: MerchantSerializer.new(merchant)
       end
 
       def update
@@ -24,7 +25,7 @@ module Api
 
       def destroy
         merchant = Merchant.find(params[:id])
-        merchant.destroy
+        merchant.delete
       end
 
       private

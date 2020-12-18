@@ -45,8 +45,9 @@ describe 'Merchants API' do
   end
 
   it 'can delete a merchant' do
-    id = create(:merchant).id
-    delete "/api/v1/merchants/#{id}"
+    merchant = create(:merchant)
+    expect(Merchant.all.count).to eq(1)
+    delete "/api/v1/merchants/#{merchant.id}"
 
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
